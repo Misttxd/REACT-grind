@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
+</head>
+
+<body>
+  <ion-app>
+
+
+    <ion-content class="ion-padding">
+
+      <ion-tabs>
+
+
+        <ion-tab tab="Home">
+
+
+          <ion-nav id="Home-nav"></ion-nav>
+
+          <div id="Home-page">
+
+            <ion-header>
+
+              <ion-toolbar>
+                <ion-title>BMI Calculator</ion-title>
+              </ion-toolbar>
+
+            </ion-header>
+
+            <ion-card class="ion-margin-top">
+              <ion-card-content>
+                <ion-input class="ion-margin-top" id="Username_input" label="Username" label-placement="floating"
+                  fill="outline" placeholder="Enter your name...">
+                  <ion-icon slot="start" name="person" aria-hidden="true"></ion-icon>
+                </ion-input>
+              </ion-card-content>
+            </ion-card>
+
+            <ion-card class="ion-margin-top">
+              <ion-card-content>
+                <ion-input type="number" class="ion-margin-top" id="Age_input" label="Age" label-placement="floating"
+                  fill="outline" placeholder="Enter your age...">
+                  <ion-icon slot="start" name="calendar" aria-hidden="true"></ion-icon>
+                </ion-input>
+              </ion-card-content>
+            </ion-card>
+
+            <ion-card class="ion-margin-top">
+              <ion-card-content>
+                <ion-radio-group value="Male" id="Gender_input">
+                  <ion-radio value="Male" label-placement="end">Male</ion-radio><br />
+                  <ion-radio value="Female" label-placement="end">Female</ion-radio><br />
+                </ion-radio-group>
+              </ion-card-content>
+            </ion-card>
+
+            <ion-card class="ion-margin-top">
+              <ion-card-content>
+                <ion-range id="Height_input" min="50" max="250" value="170" pin="true">
+                  <ion-icon slot="start" name="accessibility-outline"></ion-icon>
+                </ion-range>
+                <ion-label id="Height_label">
+                  Height is 170 cm
+                </ion-label>
+              </ion-card-content>
+              <ion-card-content>
+                <ion-range id="Weight_input" min="10" max="300" value="70" pin="true">
+                  <ion-icon slot="start" name="scale"></ion-icon>
+                </ion-range>
+                <ion-label id="Weight_label">
+                  Weight is 70 kg
+                </ion-label>
+              </ion-card-content>
+            </ion-card>
+
+            <ion-card class="ion-margin-top">
+              <ion-card-content>
+                <ion-button id="Calculate_button" expand="block" shape="round" onclick="calculateBMI()">Calculate
+                  BMI</ion-button>
+              </ion-card-content>
+            </ion-card>
+          </div>
+
+          <div>
+            <ion-modal id="result-modal" initial-breakpoint="1" breakpoints="[0, 1]">
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title id="result-title">%name%, you have %result%: %amount%</ion-title>
+                </ion-toolbar>
+              </ion-header>
+
+              <div class="ion-padding">
+                <ion-list>
+
+                  <ion-item>
+                    <ion-label id="gender-text">
+                      Gender: %gender%
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label id="height-text">
+                      Height: %height%
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label id="weight-text">
+                      Weight: %weight%
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-label id="age-text">
+                      Age: %age%
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </ion-modal>
+          </div>
+
+        </ion-tab>
+
+
+        <ion-tab tab="History">
+          <ion-nav id="History-nav"></ion-nav>
+          <div id="History-page">
+            <ion-header>
+              <ion-toolbar>
+                <ion-title>History</ion-title>
+              </ion-toolbar>
+            </ion-header>
+
+            <ion-content>
+              <ion-list inset="true" id="History_list">
+                <!-- <ion-item>
+                  <ion-label>
+                    <h2>BMI: 22.5</h2>
+                    <p>Normal weight • 12/03/2026</p>
+                  </ion-label>
+                  <ion-button slot="end" color="danger" fill="clear">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                  </ion-button>
+                </ion-item> -->
+              </ion-list>
+            </ion-content>
+          </div>
+        </ion-tab>
+
+
+
+
+        <ion-tab-bar slot="bottom">
+
+          <ion-tab-button tab="Home">
+            <ion-icon name="Home"></ion-icon>
+            Home
+          </ion-tab-button>
+
+          <ion-tab-button tab="History">
+            <ion-icon name="Library"></ion-icon>
+            History
+          </ion-tab-button>
+
+        </ion-tab-bar>
+      </ion-tabs>
+
+
+
+    </ion-content>
+  </ion-app>
+
+
+  <style>
+    ion-list {
+      width: 100%;
+    }
+
+    ion-radio.wrapped::part(label) {
+      white-space: normal;
+    }
+
+    #result-modal {
+      --height: auto;
+    }
+  </style>
+
+
+
+  <script>
+
+    const homeNav = document.querySelector('#Home-nav');
+    const homePage = document.querySelector('#Home-page');
+    if (homeNav && homePage) {
+      homeNav.root = homePage;
+    }
+
+
+    const historyNav = document.querySelector('#History-nav');
+    const historyPage = document.querySelector('#History-page');
+    if (historyNav && historyPage) {
+      historyNav.root = historyPage;
+    }
+
+
+
+
+
+    let heightInput = document.getElementById("Height_input");
+    let heightLabel = document.getElementById("Height_label");
+
+    heightInput.addEventListener('ionInput', function (event) {
+      heightLabel.textContent = "Height is " + event.detail.value + " cm";
+    });
+
+    let weightInput = document.getElementById("Weight_input");
+    let weightLabel = document.getElementById("Weight_label");
+
+    weightInput.addEventListener('ionInput', function (event) {
+      weightLabel.textContent = "Weight is " + event.detail.value + " kg";
+    });
+
+    function deleteThis(key) {
+      localStorage.removeItem(key);
+
+      let prvekKeSmazani = document.getElementById(key);
+      prvekKeSmazani.remove();
+
+    }
+
+
+
+
+
+    function calculateBMI() {
+      let username = document.getElementById("Username_input");
+      let age = document.getElementById("Age_input");
+      let gender = document.getElementById("Gender_input");
+      let height = document.getElementById("Height_input");
+      let weight = document.getElementById("Weight_input");
+
+      if (username.value == "" || age.value == "" || gender.value == "" || height.value == "" || weight.value == "") {
+        return;
+      }
+      let ageNum = Number(age.value);
+      if (Number.isInteger(ageNum) && ageNum > 0) {
+      }
+      else {
+        return;
+      }
+
+
+
+      let heightInMeters = height.value / 100;
+      let bmi = weight.value / (heightInMeters * heightInMeters);
+
+      let modal_weight_text = document.getElementById("weight-text");
+      modal_weight_text.textContent = "Weight: " + weight.value + " kg";
+
+      let modal_height_text = document.getElementById("height-text");
+      modal_height_text.textContent = "Height: " + height.value + " cm";
+
+      let modal_age_text = document.getElementById("age-text");
+      modal_age_text.innerText = "Age: " + age.value;
+
+      let modal_gender_text = document.getElementById("gender-text");
+      modal_gender_text.innerText = "Gender: " + gender.value;
+
+      let modal_result_text = document.getElementById("result-title");
+
+      if (bmi < 18.5) {
+        modal_result_text.innerText = username.value + ", you are Underweight (" + bmi.toFixed(1) + ")";
+        modal_result_text.color = "warning";
+      }
+      else if (bmi < 25) {
+        modal_result_text.innerText = username.value + ", you have Normal weight (" + bmi.toFixed(1) + ")";
+        modal_result_text.color = "success";
+      }
+      else if (bmi < 30) {
+        modal_result_text.innerText = username.value + ", you are Overweight (" + bmi.toFixed(1) + ")";
+        modal_result_text.color = "warning";
+      }
+      else {
+        modal_result_text.innerText = username.value + ", you have Obesity (" + bmi.toFixed(1) + ")";
+        modal_result_text.color = "danger";
+      }
+
+      document.getElementById('result-modal').present();
+
+      let timeKey = Date.now();
+      let vysledek = JSON.stringify({
+        bmi: bmi.toFixed(1),
+        name: username.value,
+        age: age.value,
+        gender: gender.value,
+        height: height.value,
+        weight: weight.value,
+        date: new Date().toLocaleDateString()
+      });
+
+      localStorage.setItem(timeKey, vysledek);
+
+      let data = JSON.parse(vysledek);
+      let historyList = document.getElementById("History_list");
+      historyList.innerHTML +=
+        <ion-item id="\${timeKey}">
+          <ion-label>
+            <h2>BMI: \${data.bmi}</h2>
+            <p>\${data.name} • \${data.date}</p>
+          </ion-label>
+          <ion-button slot="end" color="danger" fill="clear" onclick="deleteThis('\${timeKey}')">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+        ;
+    }
+
+    function showItems() {
+      let historyList = document.getElementById("History_list");
+      historyList.innerHTML = "";
+
+      for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+
+        let data = JSON.parse(localStorage.getItem(key));
+
+        historyList.innerHTML +=
+          <ion-item id="\${key}">
+            <ion-label>
+              <h2>BMI: \${data.bmi}</h2>
+              <p>\${data.name} • \${data.date}</p>
+            </ion-label>
+            <ion-button slot="end" color="danger" fill="clear" onclick="deleteThis('\${key}')">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+          </ion-item>
+          ;
+      }
+    }
+
+    window.addEventListener('load', function () {
+      showItems();
+    });
+
+
+
+
+
+
+  </script>
+
+</body>
+
+</html>
