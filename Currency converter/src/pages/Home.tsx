@@ -1,5 +1,5 @@
 import { IonCard, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSelect, IonSelectOption, IonCardContent, IonIcon, IonLabel, IonDatetimeButton, IonModal, IonDatetime, IonItem, IonList, IonInput, IonButton } from '@ionic/react';
-import { calendarOutline, cashOutline, earthOutline, hourglassOutline, swapVertical, walletOutline } from 'ionicons/icons';
+import { calendarOutline, cashOutline, earthOutline, globeOutline, hourglassOutline, listOutline, swapVertical, walletOutline } from 'ionicons/icons';
 import React, { useState, useEffect } from 'react';
 
 // Tímto říkáme TypeScriptu, jak vypadají data z API, aby neházel chyby.
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
               </IonItem>
 
               <IonItem>
-                <IonIcon slot="start" icon={hourglassOutline}></IonIcon>
+                <IonIcon slot="start" icon={listOutline}></IonIcon>
                 <IonSelect label="Target Currency" labelPlacement="floating" value={targetCurrency} onIonChange={e => setTargetCurrency(e.detail.value)}>
                   {currencies.map((c) => (
                     <IonSelectOption key={c.code} value={c.code}>
