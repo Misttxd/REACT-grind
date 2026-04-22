@@ -1,0 +1,9 @@
+.bmi-center {
+	text-align: center;
+}
+
+.bmi-center ion-label {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
